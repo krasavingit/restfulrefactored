@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void edit(User user) {
         User userExist = userRepository.findUserById(user.getId());
-        userExist.setEmail(user.getUsername());
+        userExist.setName(user.getName());
         userExist.setLastname(user.getLastname());
         userExist.setEmail(user.getEmail());
         userExist.setAge(user.getAge());

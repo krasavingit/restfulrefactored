@@ -94,23 +94,23 @@
                                                                 <div class="modal-body">
                                                                     <div class="form-group row">
                                                                         <label for="inputeditname" class="col col-form-label"><strong>First name</strong></label>
-                                                                        <input type="text" th:name="${user.username}" class="form-control" id="inputeditname" th:placeholder="${user.name}">
+                                                                        <input type="text" name="username" class="form-control" id="inputeditname" th:placeholder="${user.username}">
                                                                     </div>
                                                                     <div class="form-group row">
                                                                         <label for="inputeditlastname" class="col col-form-label"><strong>Last name</strong></label>
-                                                                        <input type="text" th:name="${user.lastname}" class="form-control" id="inputeditlastname" th:placeholder="${user.lastname}">
+                                                                        <input type="text" name="lastname" class="form-control" id="inputeditlastname" th:placeholder="${user.lastname}">
                                                                     </div>
                                                                     <div class="form-group row">
                                                                         <label for="inputeditAge" class="col col-form-label"><strong>Age</strong></label>
-                                                                        <input type="number" th:name="${user.age}" min="1" max="130" class="form-control" id="inputeditAge" th:placeholder="${user.age}">
+                                                                        <input type="number" name="age" min="1" max="130" class="form-control" id="inputeditAge" th:placeholder="${user.age}">
                                                                     </div>
                                                                     <div class="form-group row">
                                                                         <label for="inputEmail" class="col col-form-label"><strong>Email</strong></label>
-                                                                        <input type="email" th:name="${user.email}" class="form-control" id="inputeditEmail" th:placeholder="${user.email}">
+                                                                        <input type="email" name="email" class="form-control" id="inputeditEmail" th:placeholder="${user.email}">
                                                                     </div>
                                                                     <div class="form-group row">
                                                                         <label for="inputeditPassword" class="col col-form-label"><strong>Password</strong></label>
-                                                                        <input type="text" th:name="${user.password}" class="form-control" id="inputeditPassword" placeholder="password">
+                                                                        <input type="text" name="user.password" class="form-control" id="inputeditPassword" placeholder="password">
                                                                     </div>
                                                                     <div class="form-group row">
                                                                         <label for="editroles" class="col col-form-label"><strong>Role</strong></label>
