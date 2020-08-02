@@ -35,7 +35,7 @@ public class SignController {
     public String addUser(@RequestParam(name = "username") String username, @RequestParam(name = "email") String email,
                           @RequestParam(name = "password") String password){
         User user = new User();
-        user.setName(username);
+        user.setFirstName(username);
         user.setEmail(email);
         user.setPassword(password);
         Set<Role> set = new HashSet<>();

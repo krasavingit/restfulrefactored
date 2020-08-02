@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findUserByFirstName(username);
         if (user == null) {
             throw new UsernameNotFoundException(username);
         }
@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void edit(User user) {
         User userExist = userRepository.findUserById(user.getId());
-        userExist.setName(user.getName());
+        userExist.setFirstName(user.getFirstName());
         userExist.setLastname(user.getLastname());
         userExist.setEmail(user.getEmail());
         if (user.getAge() == 0) {

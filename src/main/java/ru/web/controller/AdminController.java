@@ -52,7 +52,7 @@ public class AdminController {
 //        if(userService.loadUserByUsername(username)!=null){
 //            model.addAttribute("userExists", "User exists");
 //        }else {
-            user.setName(username);
+            user.setFirstName(username);
             user.setEmail(email);
             user.setPassword(passwordEncoder.encode(password));
             System.out.println(user.getPassword());
@@ -105,7 +105,6 @@ public class AdminController {
             }
         }
         user.setRoles(set);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userService.edit(user);
 
         return "redirect:/admin/panel";

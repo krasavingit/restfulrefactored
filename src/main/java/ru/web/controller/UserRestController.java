@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping(value = "api/v1")
+@RequestMapping(value = "api/v1/users")
 public class UserRestController {
 
 
@@ -28,7 +28,7 @@ public class UserRestController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @GetMapping(value = "/users/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> getUser(@PathVariable("id") Long id){
         User user = userService.findOne(id);
         return user != null
@@ -42,7 +42,7 @@ public class UserRestController {
                 ? new ResponseEntity<>(user, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-    @GetMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<User>> read() {
         final List<User> users = userService.getAllUsers();
 
@@ -52,16 +52,12 @@ public class UserRestController {
     }
     @PostMapping(value = "users/add",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> addUser(@RequestBody User user){
-        if(userService.loadUserByUsername(user.getUsername()) == null){
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             userService.addUser(user);
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        }else {
          return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
-        }
     }
 
-    @PutMapping(value = "/users/update", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/users/{id}/update", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> update(@RequestBody User user) {
         if(userService.findOne(user.getId()) != null & userService.loadUserByUsername(user.getUsername()) == null){
             userService.edit(user);
