@@ -3,6 +3,7 @@ package ru.web.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,12 @@ import java.util.*;
 public class AdminController {
 
     private final UserService userService;
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Autowired
     public AdminController(UserService userService) {
@@ -42,12 +49,13 @@ public class AdminController {
     public String addUser(@RequestParam(name = "username") String username,@RequestParam(name = "lastname") String lastname,@RequestParam(name = "age") byte age, @RequestParam(name = "email") String email,
                           @RequestParam(name = "password") String password, @RequestParam(value = "role", required = true) Role role, Model model) {
         User user = new User();
-        if(userService.loadUserByUsername(username)!=null){
-            model.addAttribute("userExists", "User exists");
-        }else {
+//        if(userService.loadUserByUsername(username)!=null){
+//            model.addAttribute("userExists", "User exists");
+//        }else {
             user.setName(username);
             user.setEmail(email);
-            user.setPassword(password);
+            user.setPassword(passwordEncoder.encode(password));
+            System.out.println(user.getPassword());
             user.setLastname(lastname);
             user.setAge(age);
             model.addAttribute("roleadmin", Role.ROLE_ADMIN.getAuthority());
@@ -66,7 +74,6 @@ public class AdminController {
             }
             user.setRoles(set);
             userService.addUser(user);
-        }
         return "redirect:/admin/panel";
     }
 
@@ -98,6 +105,7 @@ public class AdminController {
             }
         }
         user.setRoles(set);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userService.edit(user);
 
         return "redirect:/admin/panel";

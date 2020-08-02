@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.web.models.Role;
@@ -18,12 +19,15 @@ import java.util.Set;
 @RequestMapping(value = "api/v1")
 public class UserRestController {
 
-    private final UserService userService;
 
+    private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
     @Autowired
-    public UserRestController(UserService userService) {
+    public UserRestController(UserService userService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
+
     @GetMapping(value = "/users/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> getUser(@PathVariable("id") Long id){
         User user = userService.findOne(id);
@@ -49,6 +53,7 @@ public class UserRestController {
     @PostMapping(value = "users/add",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> addUser(@RequestBody User user){
         if(userService.loadUserByUsername(user.getUsername()) == null){
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             userService.addUser(user);
             return new ResponseEntity<>(HttpStatus.CREATED);
         }else {

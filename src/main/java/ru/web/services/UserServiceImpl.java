@@ -3,6 +3,7 @@ package ru.web.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.web.models.User;
 import ru.web.repository.UserRepository;
@@ -16,10 +17,12 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
+
     @Autowired
     public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -56,7 +59,12 @@ public class UserServiceImpl implements UserService {
         userExist.setName(user.getName());
         userExist.setLastname(user.getLastname());
         userExist.setEmail(user.getEmail());
-        userExist.setAge(user.getAge());
+        if (user.getAge() == 0) {
+            userExist.setAge(userRepository.findUserById(user.getId()).getAge());
+        } else {
+            userExist.setAge(user.getAge());
+        }
+
         userExist.setPassword(user.getPassword());
         userExist.setRoles(user.getRoles());
         userRepository.save(userExist);
