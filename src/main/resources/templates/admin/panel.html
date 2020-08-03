@@ -139,52 +139,14 @@
                                             <td >${user.age}</td>
                                             <td >${user.email}</td>
                                             <td >${user.roles}</td>
-                                            <form action="/admin/panel/editUser" method="post">
                                                 <td>
                                                     <button type="button" class="btn btn-success" data-toggle="modal" data-target="${'#edituser'+user.id}">
                                                     Edit
                                                 </button>
-
-                                                    <!-- Edit Modal -->
-                                                </td>
-                                            </form>
                                                 <td>
-                                                    <button type="button" class="btn btn-danger" data-toggle="modal" th:data-target="${'#deluser'+user.id}">
+                                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="${'#deluser'+user.id}">
                                                         Delete
                                                     </button>
-
-                                                    <!-- Delete Modal -->
-                                                    <div class="modal fade" th:id="${'deluser'+user.id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                        <div class="modal-dialog" role="document">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title" id="deleter">Delete</h5>
-                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                        <span aria-hidden="true">&times;</span>
-                                                                    </button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <strong>ID</strong>
-                                                                    <input class="form-control" type="text" th:placeholder="${user.id}" readonly>
-                                                                    <strong>First name</strong>
-                                                                    <input class="form-control" type="text" th:placeholder="${user.name}" readonly>
-                                                                    <strong>Last name</strong>
-                                                                    <input class="form-control" type="text" th:placeholder="${user.lastname}" readonly>
-                                                                    <strong>Age</strong>
-                                                                    <input class="form-control" type="text" th:placeholder="${user.age}" readonly>
-                                                                    <strong>Email</strong>
-                                                                    <input class="form-control" type="text" th:placeholder="${user.email}" readonly>
-                                                                    <strong>Roles</strong>
-                                                                    <input class="form-control" type="text" th:placeholder="${user.roles}" readonly>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                                    <form action="/admin/panel/deleteUser" method="post">
-                                                                    <button type="submit" class="btn btn-danger" name="id" th:value="${user.id}">Delete</button></form>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
                                                 </td>
                                             </tr>
                                     `
