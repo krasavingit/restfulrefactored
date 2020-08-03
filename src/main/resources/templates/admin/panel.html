@@ -68,7 +68,6 @@
                                             </tr>
                                             </thead>
                                             <tbody id="usersTable">
-                                            <!--                                        here we have a script-->
                                             </tbody>
                                         </table>
                                     </div>
@@ -126,12 +125,15 @@
                                                     $('document').ready(function () {
                                                         //userlist
                                                         $.ajax({
-                                                            url:"/api/v1/users/all",
-                                                            method:"GET",
-                                                            success:function (users) {
+                                                            url: "/api/v1/users/all",
+                                                            type: "GET",
+                                                            success: function (users) {
                                                                 users.forEach(function (user) {
-                                                                    $('#usersTable').append($(
+                                                                    $('#usersTable').html($(
                                                                         `
+<tr>
+<td>${user.id}</td>
+</tr>
                                         <tr>
                                             <td >${user.id}</td>
                                             <td >${user.name}</td>
@@ -140,22 +142,21 @@
                                             <td >${user.email}</td>
                                             <td >${user.roles}</td>
                                                 <td>
-                                                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="${'#edituser'+user.id}">
+                                                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="${'#edituser' + user.id}">
                                                     Edit
                                                 </button>
                                                 <td>
-                                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="${'#deluser'+user.id}">
+                                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="${'#deluser' + user.id}">
                                                         Delete
                                                     </button>
                                                 </td>
                                             </tr>
                                     `
                                                                     ))
-                                                                });
+                                                                })
                                                             }
-                                                        });
-                                                    });
-
+                                                        })
+                                                    })
                                                     function getAll() {
                                                         $.ajax({
                                                             url: "/api/v1/users/",
