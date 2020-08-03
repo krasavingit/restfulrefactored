@@ -128,7 +128,8 @@
                                                 <button type="button" name="postData" id="postData" value="POST DATA" onclick="addUser();" class="btn btn-success">Add new user</button>
                                             </form>
                                             <script>
-                                                document('')
+                                               $(document).ready(
+
                                                 function getAll() {
                                                     $.ajax({
                                                         url:"/api/v1/users/",
@@ -156,7 +157,7 @@
                                                         , error: function (jqXHR, textStatus, errorThrown) {
                                                         }
                                                     });
-                                                }
+                                                })
 
                                                 function addUser() {
                                                     var modelUser = {
