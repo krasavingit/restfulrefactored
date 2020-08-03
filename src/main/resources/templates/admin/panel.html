@@ -82,7 +82,7 @@
                                                 </td>
                                             </form>
                                                 <td>
-                                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="${'#deluser'+user.id}">
+                                                    <button type="button" class="btn btn-danger"  id="1" data-toggle="modal" onclick="deleteUser(id)" data-target="#deleteModalForm">
                                                         Delete
                                                     </button>
                                                 </td>
@@ -128,8 +128,6 @@
                                                 <button type="button" name="postData" id="postData" value="POST DATA" onclick="addUser();" class="btn btn-success">Add new user</button>
                                             </form>
                                             <script>
-                                               $(document).ready(
-
                                                 function getAll() {
                                                     $.ajax({
                                                         url:"/api/v1/users/",
@@ -141,9 +139,9 @@
                                                                 document.getElementById("tId")
                                                                     .textContent = user.id;
                                                                 document.getElementById("tFirstName")
-                                                                    .placeholder = user.firstName;
+                                                                    .textContent = user.firstName;
                                                                 document.getElementById("tLastName")
-                                                                    .placeholder = user.lastname;
+                                                                    .textContent = user.lastname;
                                                                 // document.getElementById("inputeditEmail")
                                                                 //     .placeholder = user.email;
                                                                 // document.getElementById("inputeditAge")
@@ -157,7 +155,7 @@
                                                         , error: function (jqXHR, textStatus, errorThrown) {
                                                         }
                                                     });
-                                                })
+                                                }
 
                                                 function addUser() {
                                                     var modelUser = {
@@ -197,6 +195,7 @@
                                                         data: JSON.stringify(modelUser),
                                                     })
                                                 }
+
                                                 function editUserGet(id) {
                                                     $.ajax({
                                                         url:"/api/v1/users/"+ id +"",
@@ -218,6 +217,27 @@
                                                         }
                                                     });
                                                 }
+                                               function deleteUser(id) {
+                                                   $.ajax({
+                                                       url:"/api/v1/users/"+ id +"",
+                                                       type:"GET",
+                                                       success: function (user) {
+                                                           document.getElementById("inputeditname")
+                                                               .placeholder = user.firstName;
+                                                           document.getElementById("inputeditlastname")
+                                                               .placeholder = user.lastname;
+                                                           document.getElementById("inputeditEmail")
+                                                               .placeholder = user.email;
+                                                           document.getElementById("inputeditAge")
+                                                               .placeholder = user.age;
+                                                           document.getElementById("inputeditPassword")
+                                                               .placeholder = user.password;
+                                                           document.getElementById("editroles")
+                                                               .placeholder = user.role;
+                                                       }, error: function (jqXHR, textStatus, errorThrown) {
+                                                       }
+                                                   });
+                                               }
                                             </script>
                                         </div>
                                         <div class="col-4"></div>
@@ -313,6 +333,53 @@
                 </div>
                 </div>
                 </div>
+
+            <!-- Delete Modal -->
+            <div class="modal fade" id="deleteModalForm" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteModalLabel">Delete user</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group row">
+                                <label for="deleteFirstName" class="col col-form-label"><strong>First name</strong></label>
+                                <input type="text" name="firstName" class="form-control" id="deleteFirstName">
+                            </div>
+                            <div class="form-group row">
+                                <label for="deleteLastName" class="col col-form-label"><strong>Last name</strong></label>
+                                <input type="text" name="lastname" class="form-control" id="deleteLastName" placeholder="user.lastname">
+                            </div>
+                            <div class="form-group row">
+                                <label for="deleteAge" class="col col-form-label"><strong>Age</strong></label>
+                                <input type="number" name="age" min="1" max="130" class="form-control" id="deleteAge" placeholder="userEntity.age">
+                            </div>
+                            <div class="form-group row">
+                                <label for="deleteEmail" class="col col-form-label"><strong>Email</strong></label>
+                                <input type="email" name="email" class="form-control" id="deleteEmail" placeholder="user.email">
+                            </div>
+                            <div class="form-group row">
+                                <label for="deletePassword" class="col col-form-label"><strong>Password</strong></label>
+                                <input type="text" name="user.password" class="form-control" id="deletePassword" placeholder="password">
+                            </div>
+                            <div class="form-group row">
+                                <label for="deleteRoles" class="col col-form-label"><strong>Role</strong></label>
+                                <select class="form-control" name="role" id="deleteRoles">
+                                    <option value="ROLE_ADMIN"> ADMIN </option>
+                                    <option value="ROLE_USER"> USER</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
             <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
