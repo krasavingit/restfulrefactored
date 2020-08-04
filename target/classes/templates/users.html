@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <style>
+        .dialog {
+            position: fixed;
+            left: 15%;
+            top: 25%;
+            width: 70%;
+            z-index: 100;
+            background: white;
+            padding: 1rem;
+            border: 3px solid black;
+        }
+    </style>
+</head>
+<body>
+<table border="1" style="margin-left: 200px; margin-top: 150px">
+    <tr>
+        <th>ID
+        </th>
+        <th>name
+        </th>
+        <th>email
+        </th>
+        <th>Password
+        </th>
+        <th>Role</th>
+    </tr>
+    <tr th:each="user : ${userlist}">
+        <td><p th:utext="${user.id}"></p></td>
+        <td th:utext="${user.name}">...</p></td>
+        <td th:utext="${user.email}">...</p></td>
+        <td th:utext="${user.password}">...</p></td>
+        <td th:utext="${user.role}">...</p></td>
+        <td><form action="/deleteUser" name="deleter" method="post">
+            <button type="submit" name="id" th:value="${user.id}" >DELETE</button>
+        </form></td>
+        <td><button class="show">Edit</button></td>
+        <td class="dialog" th:id="${user.id}">
+            <form action="/editUser" name="id" th:value="${user.id}" method="post">
+                Name: <input type="text"  name="name"/>
+                Email: <input type="text"  name="email"/>
+                Password: <input type="text"  name="password"/>
+                <label><input type="checkbox" th:name="${user.role}"> ${user.role} </label>
+                <button type="submit" name="id" th:value="${user.id}">Edit</button>
+            </form>
+            <button class="close">Закрыть</button>
+        </td>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script type = text/javascript>
+            $('.dialog').hide()
+            $('.show').click(event => {
+                console.log(event)
+                event.target.parentElement.parentElement.children[7].style.display = 'block'
+            });
+
+            $('.close').click(event => {
+                event.target.parentElement.style.display = 'none'
+            });
+        </script>
+    </tr>
+    <tr>
+        <form action="/addUser" method="post">
+            <th>ID</th>
+            <th>Name: <input type="text"  name="name"/></th>
+            <th>Email: <input type="text"  name="email"/></th>
+            <th>Password: <input type="text"  name="password"/></th>
+            <th><input type="submit" value="Add"/></th>
+        </form>
+    </tr>
+</table>
+</body>
+</html>
