@@ -11,6 +11,7 @@ import ru.web.models.Role;
 import ru.web.models.User;
 import ru.web.services.UserService;
 
+import javax.websocket.server.PathParam;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -50,14 +51,14 @@ public class UserRestController {
                 ? new ResponseEntity<>(users, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-    @PostMapping(value = "users/add",produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/add",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> addUser(@RequestBody User user){
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             userService.addUser(user);
          return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
-    @PutMapping(value = "/users/{id}/update", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> update(@RequestBody User user) {
         if(userService.findOne(user.getId()) != null & userService.loadUserByUsername(user.getUsername()) == null){
             userService.edit(user);
@@ -66,7 +67,7 @@ public class UserRestController {
             return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
         }
     }
-    @DeleteMapping(value = "/users/{id}")
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<User> delete(@PathVariable(name = "id") long id) {
 
         if (userService.findOne(id) != null) {

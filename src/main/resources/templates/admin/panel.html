@@ -109,18 +109,18 @@
                                                                id="inputEmail" placeholder="Email">
                                                     </div>
                                                     <div class="form-group row">
-                                                        <label for="roles"
+                                                        <label for="inputRoles"
                                                                class="col col-form-label"><strong>Role</strong></label>
-                                                        <select class="form-control" name="role" id="roles">
+                                                        <select class="form-control" name="inputRoles" id="inputRoles">
                                                             <option value="ROLE_ADMIN"> ADMIN</option>
-                                                            <option value="ROLE_USER"> USER</option>
+                                                            <option value="ROLE_USER">USER</option>
                                                         </select>
                                                     </div>
-                                                    <button type="button" name="postData" id="postData"
-                                                            value="POST DATA" onclick="addUser();"
+                                                    <button type="button" onclick="addUser();"
                                                             class="btn btn-success">Add new user
                                                     </button>
                                                 </form>
+                                                <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
                                                 <script>
                                                     $('document').ready(function () {
                                                         //userlist
@@ -129,27 +129,77 @@
                                                             type: "GET",
                                                             success: function (users) {
                                                                 users.forEach(function (user) {
-                                                                    $('#usersTable').html($(
+                                                                    $('#usersTable').append($(
                                                                         `
-<tr>
-<td>${user.id}</td>
-</tr>
-                                        <tr>
+                                            <tr>
                                             <td >${user.id}</td>
-                                            <td >${user.name}</td>
+                                            <td >${user.firstName}</td>
                                             <td >${user.lastname}</td>
                                             <td >${user.age}</td>
                                             <td >${user.email}</td>
                                             <td >${user.roles}</td>
-                                                <td>
-                                                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="${'#edituser' + user.id}">
+                                            <td>
+                                                <button type="button" class="btn btn-success" id="edit${user.id}" data-toggle="modal" data-target="#editModalForm">
                                                     Edit
                                                 </button>
-                                                <td>
-                                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="${'#deluser' + user.id}">
-                                                        Delete
-                                                    </button>
-                                                </td>
+                                                 <!-- Edit Modal -->
+            <div class="modal fade" id="editModalForm" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Edit user</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" id="inputEditId">
+                            <div class="form-group row">
+                                <label for="inputeditname" class="col col-form-label"><strong>First
+                                    name</strong></label>
+                                <input type="text" name="${user.firstName}" class="form-control" id="inputeditname">
+                            </div>
+                            <div class="form-group row">
+                                <label for="inputeditlastname" class="col col-form-label"><strong>Last
+                                    name</strong></label>
+                                <input type="text" name="${user.lastname}" class="form-control" id="inputeditlastname">
+                            </div>
+                            <div class="form-group row">
+                                <label for="inputeditAge" class="col col-form-label"><strong>Age</strong></label>
+                                <input type="number" name="${user.age}" min="1" max="130" class="form-control" id="inputeditAge">
+                            </div>
+                            <div class="form-group row">
+                                <label for="inputEmail" class="col col-form-label"><strong>Email</strong></label>
+                                <input type="email" name="${user.email}" class="form-control" id="inputeditEmail">
+                            </div>
+                            <div class="form-group row">
+                                <label for="inputeditPassword"
+                                       class="col col-form-label"><strong>Password</strong></label>
+                                <input type="text" name="${user.password}" class="form-control" id="inputeditPassword">
+                            </div>
+                            <div class="form-group row">
+                                <label for="editroles" class="col col-form-label"><strong>Role</strong></label>
+                                <select class="form-control" name="${user.roles}" id="editroles">
+                                    <option value="ROLE_ADMIN"> ADMIN</option>
+                                    <option value="ROLE_USER"> USER</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" id="editor" onclick="editUserPost(${user.id});" class="btn btn-success">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+                                            </td>
+                                            <td>
+                                                <button type="button" class="btn btn-danger"  id="edit${user.id}" data-toggle="modal" onclick="deleteUserGet(${user.id});" data-target="#deleteModalForm">
+                                                    Delete
+                                                </button>
+                                            </td>
                                             </tr>
                                     `
                                                                     ))
@@ -157,114 +207,93 @@
                                                             }
                                                         })
                                                     })
-                                                    function getAll() {
-                                                        $.ajax({
-                                                            url: "/api/v1/users/",
-                                                            type: "GET",
-                                                            success: function (users) {
-                                                                console.log(JSON.stringify(users));
-                                                                users.forEach(user)
-                                                                {
-                                                                    document.getElementById("tId")
-                                                                        .textContent = user.id;
-                                                                    document.getElementById("tFirstName")
-                                                                        .textContent = user.firstName;
-                                                                    document.getElementById("tLastName")
-                                                                        .textContent = user.lastname;
-                                                                    // document.getElementById("inputeditEmail")
-                                                                    //     .placeholder = user.email;
-                                                                    // document.getElementById("inputeditAge")
-                                                                    //     .placeholder = user.age;
-                                                                    // document.getElementById("inputeditPassword")
-                                                                    //     .placeholder = user.password;
-                                                                    // document.getElementById("editroles")
-                                                                    //     .placeholder = user.role;
-                                                                }
-                                                            }
-                                                            , error: function (jqXHR, textStatus, errorThrown) {
-                                                            }
-                                                        });
-                                                    }
-
+                                                </script>
+                                                <script>
                                                     function addUser() {
-                                                        var modelUser = {
+                                                        var modelAddUser = {
                                                             firstName: $("#inputname").val(),
                                                             lastname: $("#inputlastname").val(),
                                                             email: $("#inputEmail").val(),
                                                             password: $("#inputPassword").val(),
                                                             age: $("#inputAge").val(),
-                                                            role: $("#roles").val(),
+                                                            roles: [
+                                                                $("#inputRoles").val()
+                                                            ],
                                                         }
+                                                        console.log($("#inputRoles").val());
+                                                           console.log(modelAddUser);
                                                         $.ajax({
                                                             url: "/api/v1/users/add",
-                                                            type: "POST",
+                                                            method: "POST",
                                                             headers: {
                                                                 "Content-Type": "application/json",
                                                                 "Accept": "application/json"
                                                             },
-                                                            data: JSON.stringify(modelUser),
+                                                            data: JSON.stringify(modelAddUser),
                                                         })
                                                     }
 
                                                     function editUserPost(id) {
-                                                        var modelUser = {
-                                                            firstName: $("#inputname").val(),
-                                                            lastname: $("#inputlastname").val(),
-                                                            email: $("#inputEmail").val(),
-                                                            password: $("#inputPassword").val(),
-                                                            age: $("#inputAge").val(),
-                                                            role: $("#roles").val(),
+                                                        var modelEditUser = {
+                                                            firstName: $("#inputeditname").val(),
+                                                            lastname: $("#inputeditlastname").val(),
+                                                            email: $("#inputeditEmail").val(),
+                                                            password: $("#inputeditPassword").val(),
+                                                            age: $("#inputeditAge").val(),
+                                                            roles: [
+                                                                $("#editroles").val()
+                                                            ],
                                                         }
+                                                        console.log(modelEditUser);
                                                         $.ajax({
-                                                            url: "/api/v1/users/add/?id=" + id + "/update",
-                                                            type: "POST",
+                                                            url: "/api/v1/users/",
+                                                            type: "PUT",
                                                             headers: {
                                                                 "Content-Type": "application/json",
                                                                 "Accept": "application/json"
                                                             },
-                                                            data: JSON.stringify(modelUser),
+                                                            data: JSON.stringify(modelEditUser),
                                                         })
+
                                                     }
 
-                                                    function editUserGet(id) {
+                                                        function editUserGet(id) {
                                                         $.ajax({
                                                             url: "/api/v1/users/" + id + "",
                                                             type: "GET",
                                                             success: function (user) {
-                                                                document.getElementById("inputeditname")
-                                                                    .placeholder = user.firstName;
-                                                                document.getElementById("inputeditlastname")
-                                                                    .placeholder = user.lastname;
-                                                                document.getElementById("inputeditEmail")
-                                                                    .placeholder = user.email;
-                                                                document.getElementById("inputeditAge")
-                                                                    .placeholder = user.age;
-                                                                document.getElementById("inputeditPassword")
-                                                                    .placeholder = user.password;
-                                                                document.getElementById("editroles")
-                                                                    .placeholder = user.role;
+                                                                $('#editModalForm').modal('show');
                                                             }, error: function (jqXHR, textStatus, errorThrown) {
                                                             }
                                                         });
                                                     }
 
-                                                    function deleteUser(id) {
+                                                    function deleteUserGet(id) {
                                                         $.ajax({
                                                             url: "/api/v1/users/" + id + "",
                                                             type: "GET",
                                                             success: function (user) {
-                                                                document.getElementById("inputeditname")
+                                                                document.getElementById("inputdelname")
                                                                     .placeholder = user.firstName;
-                                                                document.getElementById("inputeditlastname")
+                                                                document.getElementById("inputdellastname")
                                                                     .placeholder = user.lastname;
-                                                                document.getElementById("inputeditEmail")
+                                                                document.getElementById("inputdelemail")
                                                                     .placeholder = user.email;
-                                                                document.getElementById("inputeditAge")
+                                                                document.getElementById("inputdelage")
                                                                     .placeholder = user.age;
-                                                                document.getElementById("inputeditPassword")
+                                                                document.getElementById("inputdelpassword")
                                                                     .placeholder = user.password;
-                                                                document.getElementById("editroles")
-                                                                    .placeholder = user.role;
+                                                                document.getElementById("inputdelroles")
+                                                                    .placeholder = user.roles;
+                                                            }, error: function (jqXHR, textStatus, errorThrown) {
+                                                            }
+                                                        });
+                                                    }
+                                                    function deleteUserPost(id) {
+                                                        $.ajax({
+                                                            url: "/api/v1/users/" + id + "",
+                                                            type: "DELETE",
+                                                            success: function () {
                                                             }, error: function (jqXHR, textStatus, errorThrown) {
                                                             }
                                                         });
@@ -317,62 +346,6 @@
 
             <!-- Optional JavaScript -->
             <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-            <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-            <!-- Edit Modal -->
-            <div class="modal fade" id="editModalForm" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Edit user</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-group row">
-                                <label for="inputeditname" class="col col-form-label"><strong>First
-                                    name</strong></label>
-                                <input type="text" name="firstName" class="form-control" id="inputeditname">
-                            </div>
-                            <div class="form-group row">
-                                <label for="inputeditlastname" class="col col-form-label"><strong>Last
-                                    name</strong></label>
-                                <input type="text" name="lastname" class="form-control" id="inputeditlastname"
-                                       placeholder="user.lastname">
-                            </div>
-                            <div class="form-group row">
-                                <label for="inputeditAge" class="col col-form-label"><strong>Age</strong></label>
-                                <input type="number" name="age" min="1" max="130" class="form-control" id="inputeditAge"
-                                       placeholder="userEntity.age">
-                            </div>
-                            <div class="form-group row">
-                                <label for="inputEmail" class="col col-form-label"><strong>Email</strong></label>
-                                <input type="email" name="email" class="form-control" id="inputeditEmail"
-                                       placeholder="user.email">
-                            </div>
-                            <div class="form-group row">
-                                <label for="inputeditPassword"
-                                       class="col col-form-label"><strong>Password</strong></label>
-                                <input type="text" name="user.password" class="form-control" id="inputeditPassword"
-                                       placeholder="password">
-                            </div>
-                            <div class="form-group row">
-                                <label for="editroles" class="col col-form-label"><strong>Role</strong></label>
-                                <select class="form-control" name="role" id="editroles">
-                                    <option value="ROLE_ADMIN"> ADMIN</option>
-                                    <option value="ROLE_USER"> USER</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!-- Delete Modal -->
             <div class="modal fade" id="deleteModalForm" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
                  aria-hidden="true">
@@ -386,42 +359,40 @@
                         </div>
                         <div class="modal-body">
                             <div class="form-group row">
-                                <label for="deleteFirstName" class="col col-form-label"><strong>First
+                                <label for="inputdelname" class="col col-form-label"><strong>First
                                     name</strong></label>
-                                <input type="text" name="firstName" class="form-control" id="deleteFirstName">
+                                <input type="text" name="firstName" class="form-control" id="inputdelname" readonly>
                             </div>
                             <div class="form-group row">
-                                <label for="deleteLastName" class="col col-form-label"><strong>Last
+                                <label for="inputdellastname" class="col col-form-label"><strong>Last
                                     name</strong></label>
-                                <input type="text" name="lastname" class="form-control" id="deleteLastName"
-                                       placeholder="user.lastname">
+                                <input type="text" name="lastname" class="form-control" id="inputdellastname"
+                                       placeholder="user.lastname" readonly>
                             </div>
                             <div class="form-group row">
-                                <label for="deleteAge" class="col col-form-label"><strong>Age</strong></label>
-                                <input type="number" name="age" min="1" max="130" class="form-control" id="deleteAge"
-                                       placeholder="userEntity.age">
+                                <label for="inputdelage" class="col col-form-label"><strong>Age</strong></label>
+                                <input type="number" name="age" min="1" max="130" class="form-control" id="inputdelage"
+                                       placeholder="userEntity.age" readonly>
                             </div>
                             <div class="form-group row">
-                                <label for="deleteEmail" class="col col-form-label"><strong>Email</strong></label>
-                                <input type="email" name="email" class="form-control" id="deleteEmail"
-                                       placeholder="user.email">
+                                <label for="inputdelemail" class="col col-form-label"><strong>Email</strong></label>
+                                <input type="email" name="email" class="form-control" id="inputdelemail"
+                                       placeholder="user.email" readonly>
                             </div>
                             <div class="form-group row">
-                                <label for="deletePassword" class="col col-form-label"><strong>Password</strong></label>
-                                <input type="text" name="user.password" class="form-control" id="deletePassword"
-                                       placeholder="password">
+                                <label for="inputdelpassword" class="col col-form-label"><strong>Password</strong></label>
+                                <input type="text" name="user.password" class="form-control" id="inputdelpassword"
+                                       placeholder="password" readonly>
                             </div>
                             <div class="form-group row">
-                                <label for="deleteRoles" class="col col-form-label"><strong>Role</strong></label>
-                                <select class="form-control" name="role" id="deleteRoles">
-                                    <option value="ROLE_ADMIN"> ADMIN</option>
-                                    <option value="ROLE_USER"> USER</option>
-                                </select>
+                                <label for="inputdelroles" class="col col-form-label"><strong>Roles</strong></label>
+                                <input type="text" name="user.role" class="form-control" id="inputdelroles"
+                                       placeholder="role" readonly>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save changes</button>
+                            <button type="button" class="btn btn-secondary"  data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-danger" id="deleter">Delete user</button>
                         </div>
                     </div>
                 </div>
